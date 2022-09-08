@@ -1,0 +1,134 @@
+.folder {
+    cursor: pointer;
+    width: 20vw;
+    margin: 1rem;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+.storage-view-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.storage-view-container .folder {
+    width: 15vw;
+}
+
+.modal-upload {
+    display: flex;
+    justify-content: center;
+}
+
+.upload-file-container {
+    margin-top: 2%;
+    background-color: #fff;
+    padding: 2%;
+    border-radius: 0.3rem;
+    width: fit-content;
+    height: fit-content;
+}
+
+.new-folder-container {
+    margin-top: 12%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-folder-container form {
+    background-color: #fff;
+    width: fit-content;
+    padding: 2%;
+    border-radius: 0.3rem;
+}
+
+.new-folder-view{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1rem;
+}
+
+.new-folder-view .folder-icon{
+    margin-right: 3%;
+}
+
+.new-folder-view input{
+    padding: 0.3rem;
+    margin-right: 3%;
+}
+
+.form__group {
+    width: 100%;
+}
+
+.form__group progress {
+    margin-left: 15%;
+    margin-right: 15%;
+    width: 70%;
+}
+
+.form__group .form__input {
+    width: 100%;
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+}
+
+.form__field,
+.form__upload-zone {
+    display: flex;
+    justify-content: center;
+    padding: 0.6rem;
+    margin-top: 0.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.form__upload-zone label {
+    height: 12rem !important;
+}
+
+.btn {
+    background-color: blue;
+    color: #fff;
+    padding: 0.5rem;
+    border: transparent;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+.form__upload {
+    display: flex;
+    justify-content: center;
+}
+
+.list-item-content {
+    display: flex;
+    align-items: center;
+}
+
+.detail-view {
+    padding: 0;
+    background-color: #f0f2f5;
+    width: 100vw;
+    height: 100vh;
+}
+
+.detail-navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 1.5rem;
+}
+
+.detail-navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.detail-navbar-right {
+    cursor: pointer;
+}
