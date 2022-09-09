@@ -19,7 +19,7 @@ function DetailView() {
         const docRef = doc(db, "documents", folder)
         document.title = "MikTae_ Sharing" + " " + file + " to you"
         getDoc(docRef)
-            .then(() => {
+            .then((docSnap) => {
                 if (docSnap.exists()) {
                     // console.log(docSnap.data());
                     setDetail(docSnap.data().files);
@@ -32,11 +32,7 @@ function DetailView() {
                     console.log("No such document!");
                 }
             })
-
         document.addEventListener('contextmenu', event => event.preventDefault());
-        ifr.current.onClick = () => {
-            console.log("Success");
-        }
     }, [])
 
     return (
