@@ -47,6 +47,7 @@ function App() {
       "locale": "auto" // Default user locale
     }).then(userData => {
       console.log("Success, user recognized")
+      sessionStorage.setItem('Auth Token', hashCode(userData.facialId))
       // console.log(userData.facialId);
       // console.log("Associated Payload: " + JSON.stringify(userData.payload))
       // {"whoami": 123456, "email": "john.doe@example.com"} set via enroll()
@@ -54,7 +55,7 @@ function App() {
       updateId(userData.facialId)
       navigate("/home")
       console.log("Associated Payload: " + JSON.stringify(userData.payload.username))
-      sessionStorage.setItem('Auth Token', hashCode(userData.facialId))
+      
     }).
       catch(errCode => {
         handleError(errCode);

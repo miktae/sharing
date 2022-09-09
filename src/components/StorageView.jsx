@@ -19,7 +19,7 @@ function StorageView() {
   useEffect(() => async () => {
     const docRef = doc(db, "documents", folder);
     const docSnap = await getDoc(docRef);
-
+    document.title = "MikTae_ Sharing" + " " + folder + " to you"
     if (docSnap.exists()) {
       // console.log(docSnap.data());
       setDatas(docSnap.data().files);

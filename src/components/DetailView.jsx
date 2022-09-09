@@ -18,6 +18,7 @@ function DetailView() {
     useEffect(() => async () => {
         const docRef = doc(db, "documents", folder)
         const docSnap = await getDoc(docRef);
+        document.title = "MikTae_ Sharing" + " " + file + " to you"
 
         if (docSnap.exists()) {
             // console.log(docSnap.data());
