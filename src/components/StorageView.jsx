@@ -15,23 +15,21 @@ function StorageView() {
   const updateFolderUrl = useStore((state) => state.updateFolderUrl)
   updateFolderUrl(folder)
 
-  useEffect(() => async () => {
-    console.log("1")
+  useEffect(() => {
     const docRef = doc(db, "documents", folder);
-    const docSnap = await getDoc(docRef);
-    console.log(docSnap.data())
+    getDoc(docRef)
+      .then((docSnap) => {
+        if (docSnap.exists()) {
+          // console.log(docSnap.data());
+          setDatas(docSnap.data().files);
+          // console.log(docSnap.data().files);
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      })
     document.title = "MikTae_ Sharing" + " " + folder + " to you"
-    if (docSnap.exists()) {
-       console.log(docSnap.data());
-      setDatas(docSnap.data().files);
-       console.log(docSnap.data().files);
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
   }, [])
-
-  useEffect(() => {  console.dir(1)}, []);
 
   return (
     <div className="storage-view">
