@@ -92,9 +92,11 @@ export default function NavBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  React.useEffect(() => 
+  {setAuth(sessionStorage.getItem("Auth Token"))}, [])
+
   React.useEffect(() => async () => {
     document.title = "MikTae_ Sharing"
-    setAuth(sessionStorage.getItem("Auth Token"))
     if ((await getDoc(doc(db, 'users', id))).exists()) {
       const docRef = await getDoc(doc(db, 'users', id));
       // console.log(docRef.data())
