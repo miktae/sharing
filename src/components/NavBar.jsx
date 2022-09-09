@@ -92,20 +92,21 @@ export default function NavBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  React.useEffect(() => 
-  {setAuth(sessionStorage.getItem("Auth Token"))}, [])
+  React.useEffect(() => { setAuth(sessionStorage.getItem("Auth Token")) }, [])
 
   React.useEffect(() => async () => {
     document.title = "MikTae_ Sharing"
-    if ((await getDoc(doc(db, 'users', id))).exists()) {
-      const docRef = await getDoc(doc(db, 'users', id));
-      // console.log(docRef.data())
-      setUsername(docRef.data().name)
-    }
-    else {
-      setUsername(user)
-      setUsername(null)
-      // console.log("No such document")
+    if (id) {
+      if ((await getDoc(doc(db, 'users', id))).exists()) {
+        const docRef = await getDoc(doc(db, 'users', id));
+        // console.log(docRef.data())
+        setUsername(docRef.data().name)
+      }
+      else {
+        setUsername(user)
+        // setUsername(null)
+        // console.log("No such document")
+      }
     }
   }, [])
 

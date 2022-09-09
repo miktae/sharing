@@ -6,7 +6,6 @@ import {
   getDoc,
   doc
 } from "firebase/firestore";
-import NavBar from './NavBar'
 import "./components.css"
 import FileView from './FileView';
 

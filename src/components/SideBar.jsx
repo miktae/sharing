@@ -169,6 +169,7 @@ function SideBar() {
                             }).then(() => {
                                 setFileDownloadUrl("");
                                 setOpenModalUpload(false);
+                                setFile(null)
                                 location.reload();
                                 console.log("Done")
                             })
