@@ -22,7 +22,7 @@ function DetailView() {
             .then((docSnap) => {
                 if (docSnap.exists()) {
                     // console.log(docSnap.data());
-                    setDetail(docSnap.data().files);
+                    // setDetail(docSnap.data().files);
                     // console.log(docSnap.data().files);
                     setDetail(docSnap.data().files.filter(function (item) {
                         return item.fileName === file
