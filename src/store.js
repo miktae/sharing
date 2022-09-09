@@ -1,8 +1,12 @@
 import create from 'zustand'
 
 export const useStore = create((set) => ({
-    username: '',
-    updateUser: (name) => set({ username: name }),
+    userName: '',
+    setUserName: (name) => ({ userName: name }),
+    email: '',
+    setEmail: (e) => ({ email : e }),
+    user: {},
+    updateUser: (user) => set({ user:  user}),
     mailTo: 0,
     setMailTo: (number) => set((state) => ({ mailTo: state.mailTo + number })),
     notiTo: 0,

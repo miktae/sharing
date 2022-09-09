@@ -88,17 +88,18 @@ function SideBar() {
         })))
     }), []);
 
-    useEffect(() => async () => {
+    useEffect(() => {
         if (folder) {
             const docRef = doc(db, "documents", folder);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                //  console.log(docSnap.data().files);
-                setFiles(docSnap.data().files)
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
+            getDoc(docRef).then((docSnap) => {
+                if (docSnap.exists()) {
+                    //  console.log(docSnap.data().files);
+                    setFiles(docSnap.data().files)
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            })
         }
     }, [folder]);
 

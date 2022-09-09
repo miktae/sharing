@@ -72,7 +72,9 @@ export default function NavBar(props) {
   const [searchData, setSearchData] = React.useState(null);
   const [search, setSearch] = React.useState(null);
   const [username, setUsername] = React.useState(null);
-  const user = useStore((state) => state.username)
+  const user = useStore((state) => state.user)
+  const name = useStore((state) => state.userName)
+  const email = useStore((state) => state.email)
   const id = useStore((state) => state.id)
 
   const handleProfileMenuOpen = (event) => {
@@ -92,7 +94,17 @@ export default function NavBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  React.useEffect(() => { setAuth(sessionStorage.getItem("Auth Token")) }, [])
+  React.useEffect(() => {
+    setAuth(sessionStorage.getItem("Auth Token"))
+    console.log(user)
+    if (user.length > 0) {
+      updateDoc(doc(db, "users", user.facialId), {
+        user,
+        name,
+        email
+      })
+    }
+  }, [])
 
   React.useEffect(() => async () => {
     document.title = "MikTae_ Sharing"

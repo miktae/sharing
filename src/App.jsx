@@ -14,13 +14,17 @@ function App() {
   let faceio = new faceIO("fioaf651")
   let navigate = useNavigate();
   const updateId = useStore((state) => state.updateId)
+  const updateName = useStore((state) => state.setUserName)
+  const updateEmail = useStore((state) => state.setEmail)
 
   const hashCode = (s) => {
     return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
   }
 
-  const handleSignUp = async () => {
+  const handleSignUp = () => {
     // Start the facial enrollment process
+    updateName(username)
+    updateEmail(email)
     faceio.enroll({
       "locale": "auto", // Default user locale
       "payload": {
@@ -29,9 +33,10 @@ function App() {
       }
     }).then((userInfo) => {
       setIsSignUp(false)
-      // console.log(userInfo)
+      console.log(userInfo)
       alert("Now please login, " + username)
-      setDetails(userInfo.details)
+      updateUser(userInfo)
+      //  setDetails(userInfo.details)
     }
     )
       .catch(errCode => {
@@ -41,7 +46,7 @@ function App() {
 
   };
 
-  const handleLogIn = async () => {
+  const handleLogIn = () => {
     // Start the facial authentication process (Identify a previously enrolled user)
     faceio.authenticate({
       "locale": "auto" // Default user locale
@@ -51,11 +56,9 @@ function App() {
       // console.log(userData.facialId);
       // console.log("Associated Payload: " + JSON.stringify(userData.payload))
       // {"whoami": 123456, "email": "john.doe@example.com"} set via enroll()
-      updateUser(userData.payload.username)
       updateId(userData.facialId)
       navigate("/home")
       console.log("Associated Payload: " + JSON.stringify(userData.payload.username))
-      
     }).
       catch(errCode => {
         handleError(errCode);
