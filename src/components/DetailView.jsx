@@ -32,7 +32,7 @@ function DetailView() {
                     console.log("No such document!");
                 }
             })
-        document.addEventListener('contextmenu', event => event.preventDefault());
+       // document.addEventListener('contextmenu', event => event.preventDefault());
     }, [])
 
     return (
