@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react'
+import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import {
     getDoc,
@@ -11,6 +11,7 @@ import DetailNavBar from './DetailNavBar';
 function DetailView() {
     let { folder } = useParams();
     let { file } = useParams();
+    let ifr = useRef(null)
 
     const [detail, setDetail] = useState([]);
 
@@ -29,14 +30,21 @@ function DetailView() {
             // doc.data() will be undefined in this case
             console.log("No such document!");
         }
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        ifr.current.onClick = () =>{
+            console.log("Success");
+        }
     }, [])
 
     return (
         <div className="detail-view">
-            <DetailNavBar title={ file } />
-            {detail.map(element => <embed 
-            key={element.fileName} src={element.fileSrc +'#toolbar=0&navpanes=0'}
-            width={"100%"} height={"100%"}/>)}
+            <DetailNavBar title={file} />
+            <div className='iframe-cover' ref={ifr}>
+                {detail.map(element => <iframe key={element.fileName}
+                    src={element.fileSrc + '#toolbar=0&navpanes=0'}
+                    width={"100%"} height={"100%"} />
+                )}
+            </div>
         </div>
     )
 }

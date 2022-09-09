@@ -8,5 +8,7 @@ export const useStore = create((set) => ({
     notiTo: 0,
     setNotiTo: (number) => set((state) => ({ notiTo: state.notiTo + number})),
     folderUrl: '',
-    updateFolderUrl: (url) => set({folderUrl : url})
+    updateFolderUrl: (url) => set({folderUrl : url}),
+    id: '',
+    updateId: (id) => set({id : id})
 }))

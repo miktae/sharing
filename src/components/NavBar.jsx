@@ -2,7 +2,7 @@ import * as React from 'react';
 import { styled, alpha, useTheme } from '@mui/material/styles';
 import { useNavigate, Link, Outlet } from "react-router-dom";
 import { db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -19,6 +19,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import SideBar from './SideBar';
 import ModalReminder from './ModalReminder';
+import { useStore } from '../store';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -71,6 +72,8 @@ export default function NavBar(props) {
   const [searchData, setSearchData] = React.useState(null);
   const [search, setSearch] = React.useState(null);
   const [username, setUsername] = React.useState(null);
+  const user = useStore((state) => state.username)
+  const id = useStore((state) => state.id)
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -89,8 +92,18 @@ export default function NavBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  React.useEffect(() => {
+  React.useEffect(() => async () => {
     setAuth(sessionStorage.getItem("Auth Token"))
+    if ((await getDoc(doc(db, 'users', id))).exists()) {
+      const docRef = await getDoc(doc(db, 'users', id));
+      // console.log(docRef.data())
+      setUsername(docRef.data().name)
+    }
+    else {
+      setUsername(user)
+      setUsername(null)
+      // console.log("No such document")
+    }
   }, [])
 
   const menuId = 'primary-search-account-menu';
@@ -115,7 +128,7 @@ export default function NavBar(props) {
       <MenuItem onClick={() => {
         sessionStorage.setItem("Auth Token", "")
         location.reload()
-        }}>
+      }}>
         Log Out
       </MenuItem>
     </Menu>
@@ -254,7 +267,7 @@ export default function NavBar(props) {
                 color="inherit"
               >
                 <AccountCircle />
-                {username}
+                <div className="user_name">{username}</div>
               </IconButton>
             </Box>
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

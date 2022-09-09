@@ -34,7 +34,6 @@ import {
     getDownloadURL,
 } from "firebase/storage";
 import { style, DrawerHeader } from "./MUI"
-import { useStore } from "../store"
 import "./components.css"
 
 function SideBar() {
@@ -87,23 +86,14 @@ function SideBar() {
             ...doc.data(),
             id: doc.id
         })))
-        // setFiles(snapshot.docs.map(doc => ({
-
-        // })))
-        // console.log(documents)
-        // console.log(folderName);
     }), []);
 
     useEffect(() => async () => {
-
-        // console.log(documents)
-        // console.log(id);
-
         if (folder) {
             const docRef = doc(db, "documents", folder);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-              //  console.log(docSnap.data().files);
+                //  console.log(docSnap.data().files);
                 setFiles(docSnap.data().files)
             } else {
                 // doc.data() will be undefined in this case
@@ -112,7 +102,7 @@ function SideBar() {
         }
     }, [folder]);
 
-  //  useEffect(() => {  console.log(files); }, [files])
+    //  useEffect(() => {  console.log(files); }, [files])
 
     const openDrawer = () => setOpen(true);
 
@@ -167,20 +157,22 @@ function SideBar() {
                     ])
 
                     try {
-                        updateDoc(doc(db, "documents", folder), {
-                            files: [...files, {
-                                fileName: file.name,
-                                fileType: file.type,
-                                fileCreatedAt: new Date(),
-                                fileCreatedBy: null,
-                                fileSrc: downloadURL,
-                            }]
-                        }).then(() => {
-                            setFileDownloadUrl("");
-                            setOpenModalUpload(false);
-                            location.reload();
-                            console.log("Done")
-                        })
+                        if (folder) {
+                            updateDoc(doc(db, "documents", folder), {
+                                files: [...files, {
+                                    fileName: file.name,
+                                    fileType: file.type,
+                                    fileCreatedAt: new Date(),
+                                    fileCreatedBy: null,
+                                    fileSrc: downloadURL,
+                                }]
+                            }).then(() => {
+                                setFileDownloadUrl("");
+                                setOpenModalUpload(false);
+                                location.reload();
+                                console.log("Done")
+                            })
+                        }
                     } catch (err) {
                         alert(err)
                     }

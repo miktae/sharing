@@ -2,19 +2,21 @@ import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { useStore } from "./store"
 import styles from "./App.module.css";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 function App() {
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
+  const [details, setDetails] = useState()
   const updateUser = useStore((state) => state.updateUser)
   let faceio = new faceIO("fioaf651")
   let navigate = useNavigate();
+  const updateId = useStore((state) => state.updateId)
 
   const hashCode = (s) => {
-    return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);              
+    return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
   }
 
   const handleSignUp = async () => {
@@ -25,19 +27,17 @@ function App() {
         "username": username,
         "email": email,
       }
-    }).then(userInfo => {
-      // console.log(userInfo)
-      // setDoc(doc(db, "documents", userData.facialId), {
-      //   name: username,
-      //   email: email,
-      //   id: userData.facialId
-      // })
-      alert("Now please login, " + username)
+    }).then((userInfo) => {
       setIsSignUp(false)
-    }).catch(errCode => {
-      // Something went wrong during enrollment, log the failure
-      handleError(errCode);
-    })
+      // console.log(userInfo)
+      alert("Now please login, " + username)
+      setDetails(userInfo.details)
+    }
+    )
+      .catch(errCode => {
+        // Something went wrong during enrollment, log the failure
+        handleError(errCode);
+      })
 
   };
 
@@ -47,22 +47,18 @@ function App() {
       "locale": "auto" // Default user locale
     }).then(userData => {
       console.log("Success, user recognized")
-     // console.log(userData.facialId);
-      console.log("Associated Payload: " + JSON.stringify(userData.payload))
+      // console.log(userData.facialId);
+      // console.log("Associated Payload: " + JSON.stringify(userData.payload))
       // {"whoami": 123456, "email": "john.doe@example.com"} set via enroll()
       updateUser(userData.payload.username)
-      setDoc(doc(db, "documents", userData.facialId), {
-        name: username,
-        email: email,
-        id: userData.facialId
-      })
+      updateId(userData.facialId)
       navigate("/home")
       console.log("Associated Payload: " + JSON.stringify(userData.payload.username))
       sessionStorage.setItem('Auth Token', hashCode(userData.facialId))
     }).
-    catch(errCode => {
-      handleError(errCode);
-    });
+      catch(errCode => {
+        handleError(errCode);
+      });
   };
 
   function handleError(errCode) {
@@ -169,7 +165,7 @@ function App() {
               <input className={styles.input} type="email"
                 onChange={(e) => {
                   setEmail(e.target.value)
-                 // console.log(email)
+                  // console.log(email)
                 }}
                 placeholder='Type your email address' />
               <input className={styles.submit}
@@ -178,7 +174,7 @@ function App() {
             <div className={styles.authentication}>
               <h1 className={styles.title}>Facial Authentication</h1>
               <h2 style={{ cursor: 'pointer' }}
-               onClick={() => open("https://www.facebook.com/miktae07", "_self")}>
+                onClick={() => open("https://www.facebook.com/miktae07", "_self")}>
                 @MikTae
               </h2>
               <div className={styles.buttonContainer}>

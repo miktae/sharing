@@ -9,9 +9,6 @@ function DetailNavBar(props) {
             <div className="detail-navbar-left">
                 {props.title} <ArticleIcon />
             </div>
-            <div className="detail-navbar-right">
-                <QuestionAnswerIcon />
-            </div>
         </div>
     )
 }
