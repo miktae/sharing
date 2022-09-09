@@ -20,9 +20,9 @@ function StorageView() {
     const docSnap = await getDoc(docRef);
     document.title = "MikTae_ Sharing" + " " + folder + " to you"
     if (docSnap.exists()) {
-      // console.log(docSnap.data());
+       console.log(docSnap.data());
       setDatas(docSnap.data().files);
-      // console.log(docSnap.data().files);
+       console.log(docSnap.data().files);
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!");
