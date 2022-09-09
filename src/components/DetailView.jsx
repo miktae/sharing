@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
-import { useStore } from "../store"
 import { db } from "../firebase";
 import {
     getDoc,
@@ -10,14 +9,13 @@ import "./components.css"
 import DetailNavBar from './DetailNavBar';
 
 function DetailView() {
+    let { folder } = useParams();
     let { file } = useParams();
-
-    const folderUrl = useStore((state) => state.folderUrl)
 
     const [detail, setDetail] = useState([]);
 
     useEffect(() => async () => {
-        const docRef = doc(db, "documents", folderUrl)
+        const docRef = doc(db, "documents", folder)
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {

@@ -5,12 +5,8 @@ import { db } from "./firebase";
 import {
   collection,
   onSnapshot,
-  orderBy,
-  query
 } from "firebase/firestore";
-import NavBar from "./components/NavBar"
 import Folder from "./components/Folder"
-import FileView from "./components/FileView"
 import styles from "./Home.module.css"
 
 function Home() {
@@ -32,12 +28,13 @@ function Home() {
     })
     // console.log(containerRef)
     let authToken = sessionStorage.getItem('Auth Token')
-    // if (authToken) {
-    //   console.log('Auth successful!');
-    // }
-    // else {
-    //   navigate('/')
-    // }
+    if (authToken) {
+      console.log('Auth successful!');
+    }
+    else {
+      alert("Login or Signup!")
+      navigate('/')
+    }
   }, [])
 
   useEffect(() => {
@@ -46,7 +43,6 @@ function Home() {
 
   return (
     <div className={styles.home}>
-      <NavBar mailNumber={mailTo} notiNumber={notiTo} />
       {/* Home, Welcome { uname } */}
       <div className={styles.container} ref={container}>
         {

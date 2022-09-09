@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { styled, alpha, useTheme } from '@mui/material/styles';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, Link, Outlet } from "react-router-dom";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,13 +18,14 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import SideBar from './SideBar';
+import ModalReminder from './ModalReminder';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  backgroundColor: alpha(theme.palette.common.white, 0.4),
   '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: alpha(theme.palette.common.white, 0.3),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
@@ -61,9 +64,12 @@ export default function NavBar(props) {
   const theme = useTheme();
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [auth, setAuth] = React.useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [searchData, setSearchData] = React.useState(null);
+  const [search, setSearch] = React.useState(null);
   const [username, setUsername] = React.useState(null);
 
   const handleProfileMenuOpen = (event) => {
@@ -82,6 +88,10 @@ export default function NavBar(props) {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  React.useEffect(() => {
+    setAuth(sessionStorage.getItem("Auth Token"))
+  }, [])
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -102,6 +112,12 @@ export default function NavBar(props) {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={() => {
+        sessionStorage.setItem("Auth Token", "")
+        location.reload()
+        }}>
+        Log Out
+      </MenuItem>
     </Menu>
   );
 
@@ -156,78 +172,109 @@ export default function NavBar(props) {
       </MenuItem>
     </Menu>
   );
-  
+
+  const SearchDoc = async (e) => {
+    setSearch(e.target.value)
+    if ((await getDoc(doc(db, 'documents', e.target.value))).exists()) {
+      const docRef = await getDoc(doc(db, 'documents', e.target.value));
+      // console.log(docRef.data())
+      setSearchData(docRef.data().files)
+    }
+    else {
+      setSearchData(null)
+      // console.log("No such document")
+    }
+  }
+
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar style={{ minHeight: '3rem' }}>
-           <SideBar />
-          <Typography
-            variant="h6"
-            wrap = { true.toString() }
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-            style = {{ cursor : 'pointer' }}
-            onClick = {() => navigate('/home') }
-          >
-            MikTae- Sharing
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} >
-          </Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={props.mailNumber} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar style={{ minHeight: '3rem' }}>
+            <SideBar />
+            <Typography
+              variant="h6"
+              wrap={true.toString()}
+              component="div"
+              sx={{ display: { xs: 'none', sm: 'block' } }}
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate('/home')}
             >
-              <Badge badgeContent={props.notiNumber} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-              { username }
-            </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </Box>
+              MikTae- Sharing
+            </Typography>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                onChange={(e) => SearchDoc(e)}
+                placeholder="Search folder…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+            {search && <div className="header__search-list" >
+              <ul className="header__search-ul">
+                {
+                  searchData ? searchData.map(item => <li
+                    key={item.fileName}>
+                    <Link to={"/storage/" +
+                      search + "/" + item.fileName}>
+                      {item.fileName}
+                    </Link>
+                  </li>
+                  ) : <p>No results found</p>
+                }
+              </ul>
+            </div>}
+            <Box sx={{ flexGrow: 1 }} >
+            </Box>
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={props.mailNumber} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={props.notiNumber} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+                {username}
+              </IconButton>
+            </Box>
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+      </Box>
+      {auth ? <Outlet /> : <ModalReminder />}
+    </>
   );
 }

@@ -32,7 +32,6 @@ function StorageView() {
 
   return (
     <div className="storage-view">
-      <NavBar />
       <div className="storage-view-container">
         {
           datas && datas.map(data => <FileView name={data.fileName}
