@@ -16,6 +16,7 @@ function StorageView() {
   updateFolderUrl(folder)
 
   useEffect(() => async () => {
+    console.log("1")
     const docRef = doc(db, "documents", folder);
     const docSnap = await getDoc(docRef);
     console.log(docSnap.data())
@@ -29,6 +30,8 @@ function StorageView() {
       console.log("No such document!");
     }
   }, [])
+
+  useEffect(() => {  console.dir(1)}, []);
 
   return (
     <div className="storage-view">
