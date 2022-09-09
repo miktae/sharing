@@ -15,24 +15,26 @@ function DetailView() {
 
     const [detail, setDetail] = useState([]);
 
-    useEffect(() => async () => {
+    useEffect(() => {
         const docRef = doc(db, "documents", folder)
-        const docSnap = await getDoc(docRef);
         document.title = "MikTae_ Sharing" + " " + file + " to you"
+        getDoc(docRef)
+            .then(() => {
+                if (docSnap.exists()) {
+                    // console.log(docSnap.data());
+                    setDetail(docSnap.data().files);
+                    // console.log(docSnap.data().files);
+                    setDetail(docSnap.data().files.filter(function (item) {
+                        return item.fileName === file
+                    }))
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            })
 
-        if (docSnap.exists()) {
-            // console.log(docSnap.data());
-            setDetail(docSnap.data().files);
-            // console.log(docSnap.data().files);
-            setDetail(docSnap.data().files.filter(function (item) {
-                return item.fileName === file
-            }))
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
         document.addEventListener('contextmenu', event => event.preventDefault());
-        ifr.current.onClick = () =>{
+        ifr.current.onClick = () => {
             console.log("Success");
         }
     }, [])
