@@ -5,7 +5,7 @@ export const useStore = create((set) => ({
     setUserName: (name) => ({ userName: name }),
     email: '',
     setEmail: (e) => ({ email : e }),
-    user: {},
+    user: null,
     updateUser: (user) => set({ user:  user}),
     mailTo: 0,
     setMailTo: (number) => set((state) => ({ mailTo: state.mailTo + number })),

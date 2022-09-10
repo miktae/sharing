@@ -188,7 +188,8 @@ function SideBar() {
         e.preventDefault()
         // Add folder to database
         setDoc(doc(db, "documents", folderName.current.value), {
-            "createdAt": new Date()
+            createdAt: new Date(),
+            folderColor: "#000"
         });
         setOpenModalNewFolder(false);
     }

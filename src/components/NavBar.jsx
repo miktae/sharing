@@ -97,7 +97,7 @@ export default function NavBar(props) {
   React.useEffect(() => {
     setAuth(sessionStorage.getItem("Auth Token"))
     console.log(user)
-    if (user.length > 0) {
+    if (user && user.length > 0) {
       updateDoc(doc(db, "users", user.facialId), {
         user,
         name,
