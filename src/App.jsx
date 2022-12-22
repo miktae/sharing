@@ -11,7 +11,7 @@ function App() {
   const [username, setUsername] = useState('')
   const [details, setDetails] = useState()
   const updateUser = useStore((state) => state.updateUser)
-  let faceio = new faceIO("fioaf651")
+  let faceio = new faceIO("fioaca81")
   let navigate = useNavigate();
   const updateId = useStore((state) => state.updateId)
   const updateName = useStore((state) => state.setUserName)
