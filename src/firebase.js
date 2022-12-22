@@ -9,14 +9,14 @@ import { getStorage } from "firebase/storage";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyABU2SEBJ25R6kHCoGTPlHRk5GB3tfVnsw",
-  authDomain: "facial-authentication-47103.firebaseapp.com",
-  projectId: "facial-authentication-47103",
-  storageBucket: "facial-authentication-47103.appspot.com",
-  databaseURL: "https://facial-authentication-47103.asia-southeast2.firebasedatabase.app",
-  messagingSenderId: "624247327928",
-  appId: "1:624247327928:web:693df52c474cf39ae5784d",
-  measurementId: "G-J83RZGBRW2"
+  apiKey: "AIzaSyApgf_-hdtm54TL1I7gjh67o-msYrUb7A8",
+  authDomain: "rws-reactnative.firebaseapp.com",
+  projectId: "rws-reactnative",
+  storageBucket: "rws-reactnative.appspot.com",
+  messagingSenderId: "618892807498",
+  appId: "1:618892807498:web:0f1d33490fab814d9245b3",
+  measurementId: "G-V542NP195S",
+  databaseURL: "https://rws-reactnative.asia-southeast2.firebasedatabase.app",
 };
 
 // Initialize Firebase
