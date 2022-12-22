@@ -17,7 +17,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HashRouter>
       <Routes>
-        <Route index element={<App />} />
         <Route path="/" element={<NavBar />} >
           <Route extract path="/home" element={<Home />} />
           <Route path="storage/:folder" element={<StorageView />} />
