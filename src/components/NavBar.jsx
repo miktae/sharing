@@ -303,7 +303,7 @@ export default function NavBar(props) {
         {renderMobileMenu}
         {renderMenu}
       </Box>
-      {auth ? <Outlet /> : <ModalReminder />}
+    <Outlet /> 
     </>
   );
 }
